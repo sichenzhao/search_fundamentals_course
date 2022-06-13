@@ -40,7 +40,7 @@ cd $PYTHON_LOC
 echo ""
 if [ -f index_products.py ]; then
   echo "Indexing product data in $DATASETS_DIR/product_data/products and writing logs to $LOGS_DIR/index_products.log"
-  nohup python index_products.py -s "$DATASETS_DIR/product_data/products" > "$LOGS_DIR/index_products.log" &
+  python index_products.py -s "$DATASETS_DIR/product_data/products" > "$LOGS_DIR/index_products.log" &
   if [ $? -ne 0 ] ; then
     echo "Failed to index products"
     exit 2
@@ -48,7 +48,7 @@ if [ -f index_products.py ]; then
 fi 
 if [ -f index_queries.py ]; then
   echo "Indexing queries data and writing logs to $LOGS_DIR/index_queries.log"
-  nohup python index_queries.py -s "$DATASETS_DIR/train.csv" > "$LOGS_DIR/index_queries.log" &
+  python index_queries.py -s "$DATASETS_DIR/train.csv" > "$LOGS_DIR/index_queries.log" &
   if [ $? -ne 0 ] ; then
     exit 2
   fi

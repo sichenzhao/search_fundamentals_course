@@ -116,18 +116,55 @@ def create_query(user_query, filters, sort="_score", sortDir="desc"):
             {sort : {"order" : sortDir}}
         ],
         "query": {
-            "bool": {
-                "must": [
-                  {
-                    "query_string": {
-                        "fields": [ "name", "shortDescription", "longDescription"],
-                        "query": user_query,
-                        "phrase_slop": "3"
+            "function_score": {
+                "query": {
+                    "bool":{
+                        "must":[
+                            {
+                                "query_string": {
+                                    "fields": [ "name", "shortDescription", "longDescription"],
+                                    "query": user_query,
+                                    "phrase_slop": "3"
+                                }
+                            }
+                            ],
+                            "filter": filters
+                        }
+                },
+                "boost_mode": "multiply",
+                "score_mode": "sum",
+                "functions": [
+                    {
+                        "field_value_factor": { 
+                        "field": "bestSellingRank.keyword",  
+                        "modifier": "reciprocal",
+                        "missing": "1000"
+                        }
+                    },
+                    {
+                        "field_value_factor": { 
+                        "field": "salesRankShortTerm.keyword",  
+                        "modifier": "reciprocal",
+                        "missing": "1000"
+                        }
+                    },
+                    {
+                        "field_value_factor": { 
+                        "field": "salesRankMediumTerm.keyword",  
+                        "modifier": "reciprocal",
+                        "missing": "1000"
+                        }
+                    },
+                    {
+                        "field_value_factor": { 
+                        "field": "salesRankLongTerm.keyword",  
+                        "modifier": "reciprocal",
+                        "missing": "1000"
+                        }
                     }
-                  }
-                ],
-                "filter": filters
+                ]
             }
+        }
             # Replace me with a query that both searches and filters
         },
         "aggs": {
