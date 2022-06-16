@@ -163,10 +163,10 @@ def create_query(user_query, filters, sort="_score", sortDir="desc"):
                         }
                     }
                 ]
+                }
             }
-        }
             # Replace me with a query that both searches and filters
-        },
+        ,
         "aggs": {
             #### Step 4.b.i: create the appropriate query and aggregations here
             "regularPrice": {
