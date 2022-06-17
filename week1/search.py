@@ -132,7 +132,7 @@ def create_query(user_query, filters, sort="_score", sortDir="desc"):
                         }
                 },
                 "boost_mode": "multiply",
-                "score_mode": "sum",
+                "score_mode": "avg",
                 "functions": [
                     {
                         "field_value_factor": { 
@@ -160,6 +160,13 @@ def create_query(user_query, filters, sort="_score", sortDir="desc"):
                         "field": "salesRankLongTerm.keyword",  
                         "modifier": "reciprocal",
                         "missing": "1000"
+                        }
+                    },
+                    {
+                        "field_value_factor": { 
+                        "field": "customerReviewCount",  
+                        "modifier": "none",
+                        "missing": "0"
                         }
                     }
                 ]

@@ -33,7 +33,7 @@ echo " Product file: $PRODUCTS_JSON_FILE"
 curl -k -X PUT -u admin  "https://localhost:9200/bbuy_products" -H 'Content-Type: application/json' -d "@$PRODUCTS_JSON_FILE"
 echo ""
 echo " Query file: $QUERIES_JSON_FILE"
-#curl -k -X PUT -u admin  "https://localhost:9200/bbuy_queries" -H 'Content-Type: application/json' -d "@$QUERIES_JSON_FILE"
+curl -k -X PUT -u admin  "https://localhost:9200/bbuy_queries" -H 'Content-Type: application/json' -d "@$QUERIES_JSON_FILE"
 echo " finish Query/Product creation"
 
 cd $PYTHON_LOC
@@ -48,7 +48,7 @@ if [ -f index_products.py ]; then
 fi 
 if [ -f index_queries.py ]; then
   echo "Indexing queries data and writing logs to $LOGS_DIR/index_queries.log"
-  python index_queries.py -s "$DATASETS_DIR/train.csv" > "$LOGS_DIR/index_queries.log" &
+  #python index_queries.py -s "$DATASETS_DIR/train.csv" > "$LOGS_DIR/index_queries.log" &
   if [ $? -ne 0 ] ; then
     exit 2
   fi
