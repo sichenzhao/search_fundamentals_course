@@ -122,7 +122,7 @@ def create_query(user_query, filters, sort="_score", sortDir="desc"):
                         "must":[
                             {
                                 "query_string": {
-                                    "fields": [ "name", "shortDescription", "longDescription"],
+                                    "fields": [ "name^100", "shortDescription", "longDescription", "categoryPath^1000"],
                                     "query": user_query,
                                     "phrase_slop": "3"
                                 }
@@ -165,7 +165,7 @@ def create_query(user_query, filters, sort="_score", sortDir="desc"):
                     {
                         "field_value_factor": { 
                         "field": "customerReviewCount",  
-                        "modifier": "none",
+                        "modifier": "sqrt",
                         "missing": "0"
                         }
                     }
