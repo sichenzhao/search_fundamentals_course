@@ -75,6 +75,8 @@ def evaluate_test_set(test_data, prior_clicks_df, opensearch, xgb_model_name, lt
         # Run hand-tuned
         hand_tuned_query_obj = qu.create_query(key, click_prior_query, filters=None, size=size, highlight=False, include_aggs=False, source=source)
 
+        qu.add_spelling_suggestions(hand_tuned_query_obj, key)
+
         __judge_hits(test_skus_for_query, index, key, no_hand_tuned, opensearch, hand_tuned_query_obj, "hand_tuned", results, seen)
         # NOTE: very important, we cannot look at the test set for click weights, but we can look at the train set.
 
@@ -301,6 +303,7 @@ def get_explain_query_for_type(query, type, click_prior_query, ltr_model_name, l
         qo, num_shoulds = lu.create_sltr_simple_query(query, qo, click_prior_query, ltr_model_name, ltr_store_name)
     elif type == "ltr_hand_tuned":
         qo = qu.create_query(query, click_prior_query, None, include_aggs=False, highlight=False)
+        qu.add_spelling_suggestions(qo, query)
         qo, num_shoulds = lu.create_sltr_hand_tuned_query(query, qo, click_prior_query, ltr_model_name, ltr_store_name)
     try:
         qo.pop("size")
@@ -340,6 +343,7 @@ def lookup_query(query, all_clicks_df, opensearch, explain=False, index="bbuy_pr
                     print(json.dumps(doc, indent=4))
                     if explain:
                         query_obj = qu.create_query(query, None, include_aggs=False, highlight=False, source=source)
+                        qu.add_spelling_suggestions(query_obj, query)
                         query_obj.pop("size")
                         query_obj.pop("sort")
                         query_obj.pop("_source")
